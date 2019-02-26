@@ -1,7 +1,6 @@
 import time
 
 from colorama import init, Fore, Style
-from elasticsearch import Elasticsearch, helpers
 from pyrogram import Client
 from pyrogram.api import functions, types
 from pyrogram.api.errors import BadRequest, FloodWait, UnknownError
@@ -20,8 +19,6 @@ print(Fore.CYAN + """
    ╚═╝   ╚══════╝╚══════╝╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═══╝
 --- v1.0 by @Pielco11 ---
 """)
-
-#es = Elasticsearch()
 
 def userID(userInput):
     if userInput.startswith("pn-") or userInput.startswith("u-"):
