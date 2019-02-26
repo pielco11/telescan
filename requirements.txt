@@ -1,4 +1,3 @@
 tqdm
 pyrogram
 colorama
-elasticsearch
