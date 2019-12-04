@@ -1,13 +1,16 @@
-import time
+import time, sys
 
 from colorama import init, Fore, Style
 from pyrogram import Client
 from pyrogram.api import functions, types
-from pyrogram.api.errors import BadRequest, FloodWait, UnknownError
+from pyrogram.errors import BadRequest, FloodWait, UnknownError
 from tqdm import tqdm
 
-api_id = ""
-api_hash = ""
+cFile = sys.argv[1]
+app = Client(
+    config_file=cFile,
+    session_name=cFile.split('.')[0]
+)
 
 init(autoreset=True)
 print(Fore.CYAN + """
@@ -95,10 +98,6 @@ def chatMembersInfoPrint(data, total=True):
         print("|-> Status: {}\n|-> Join date: {}".format(_status, _date))
         print("|-> Invited by id: {} | username: {} | Full name: {}".format(_invitedByID, _invitedByUsername, _invitedByFullName))
 
-app = Client(
-        "session",
-        api_id=api_id,
-        api_hash=api_hash)
 
 while True:
     with app:
