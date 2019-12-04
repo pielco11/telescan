@@ -66,11 +66,11 @@ def singleUserLookup(user):
 
 def chatMembersInfoPrint(data, total=True):
     if total:
-        totalCount = data['total_count']
+        totalCount = len(data)
         print("[+++] Users count: {}".format(totalCount))
-        userList = data['chat_members']
+        userList = data
     else:
-        userList = [data]
+        userList = data
     print(Fore.GREEN + "[user infos]" + Style.RESET_ALL)
     for user in userList:
         singleUserLookup(user)
@@ -104,7 +104,7 @@ while True:
         choice = input(Fore.CYAN + "[1] => chats lookup\n[2] => users lookup\n" + 
                                    "[3] => search user in groups\n[<] " + Style.RESET_ALL)
         if choice == "1":
-            dialogs = app.get_dialogs()['dialogs']
+            dialogs = app.get_dialogs()
             i = 0
             for d in dialogs:
                 chatListPrint(d['chat'])
