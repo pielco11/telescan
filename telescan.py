@@ -129,7 +129,7 @@ while True:
             lookupResult = app.get_users([userID(userInput)])
             singleUserLookup({'user': lookupResult[0]})
         elif choice == "3":
-            dialogs = app.get_dialogs()['dialogs']
+            dialogs = app.get_dialogs()
             userInput = input(Fore.CYAN + "[user-id (id)/username (u)/phone number (pn)]: " + Style.RESET_ALL)
             for d in dialogs:
                 if int(d['chat']['id']) < 0:
