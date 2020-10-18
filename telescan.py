@@ -68,10 +68,14 @@ def chatMembersInfoPrint(data, total=True):
     for user in userList:
         singleUserLookup(user)
         _status = user['status']
-        _date = user['date']
+        _date = None
+        try:
+            _date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(user['joined_date']))
+        except AttributeError:
+            pass
         if user['invited_by']:
-            _invitedByID = user['invited_by'].get('id')
-            _invitedByUsername = user['invited_by'].get('username')
+            _invitedByID = user['invited_by']['id']
+            _invitedByUsername = user['invited_by']['username']
             _invitedByFirstName = user['invited_by']['first_name']
             _invitedBySurname = user['invited_by']['last_name']
             _invitedByFullName = _invitedByFirstName + " " + _invitedBySurname
@@ -128,4 +132,5 @@ with app:
                             print(str(e))
         else:
             print(Fore.RED + "\n[x] exiting!" +Style.RESET_ALL)
+            app.stop()
             exit()
