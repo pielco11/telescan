@@ -78,7 +78,7 @@ def chatMembersInfoPrint(data, total=True):
             _invitedByUsername = user['invited_by']['username']
             _invitedByFirstName = user['invited_by']['first_name']
             _invitedBySurname = user['invited_by']['last_name']
-            _invitedByFullName = _invitedByFirstName + " " + _invitedBySurname
+            _invitedByFullName = _invitedByFirstName + " " + _invitedBySurname if _invitedBySurname else _invitedByFirstName
         else:
             _invitedByID = 0
             _invitedByFullName = ""
