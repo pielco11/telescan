@@ -2,7 +2,6 @@ import time, sys
 
 from colorama import init, Fore, Style
 from pyrogram import Client
-from pyrogram.api import functions, types
 from pyrogram.errors import BadRequest, FloodWait, UnknownError
 from tqdm import tqdm
 
@@ -37,30 +36,24 @@ def chatListPrint(data):
     _id = data['id']
     _type = data['type']
     _title = data['title']
-    try:
-        _username = data['username']
-    except KeyError:
-        _username = "none"
-    print("[id] {} | Title: {} | Username: {} | Type: {}".format(_id, _title, _username, _type))
+    _dc = data['dc_id']
+    _username = data['username']
+    print("[id] {} | Title: {} | Username: {} | Type: {} | DC: {}".format(_id, _title, _username, _type, _dc))
 
 def singleUserLookup(user):
     _id = user['user']['id']
     _contact = user['user']['is_contact']
-    try:
-        _first_name = user['user']['first_name']
-        _last_name = user['user']['last_name']
-        _fullName = _first_name + " " + bool(_last_name)*str(_last_name)
-    except KeyError:
-        _fullName = _first_name
-    try:
-        _username = user['user']['username']
-    except KeyError:
-        _username = " "
-    try:
-        _phone = user['user']['phone_number']
-    except KeyError:
-        _phone = 0
+    _first_name = user['user']['first_name']
+    _last_name = user['user']['last_name']
+    _fullName = _first_name + " " + _last_name if _last_name else _first_name
+    _username = user['user']['username']
+    _phone = user['user']['phone_number']
+    _dc = user['user']['dc_id']
+    _lod = user['user']['last_online_date']
+    if _lod:
+        _lod = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(_lod))
     print("------\n|-> ID: {}\n|-> Contact: {}\n|-> Full name: {}\n|-> Username: {}\n|-> Phone: {}".format(_id, _contact, _fullName, _username, _phone))
+    print("|-> DC: {}\n|-> Last Online Date: {}".format(_dc, _lod))
 
 
 
@@ -77,20 +70,11 @@ def chatMembersInfoPrint(data, total=True):
         _status = user['status']
         _date = user['date']
         if user['invited_by']:
-            try:
-                _invitedByID = user['invited_by']['id']
-            except KeyError:
-                _invitedByID = 0
-            try:
-                _invitedByUsername = user['invited_by']['username']
-            except KeyError:
-                _invitedByUsername = ""
-            try:
-                _invitedByFirstName = user['invited_by']['first_name']
-                _invitedBySurname = user['invited_by']['last_name']
-                _invitedByFullName = _invitedByFirstName + " " + bool(_invitedBySurname)*str(_invitedBySurname)
-            except KeyError:
-                _invitedByFullName = _invitedByFirstName
+            _invitedByID = user['invited_by'].get('id')
+            _invitedByUsername = user['invited_by'].get('username')
+            _invitedByFirstName = user['invited_by']['first_name']
+            _invitedBySurname = user['invited_by']['last_name']
+            _invitedByFullName = _invitedByFirstName + " " + _invitedBySurname
         else:
             _invitedByID = 0
             _invitedByFullName = ""
@@ -99,10 +83,12 @@ def chatMembersInfoPrint(data, total=True):
         print("|-> Invited by id: {} | username: {} | Full name: {}".format(_invitedByID, _invitedByUsername, _invitedByFullName))
 
 
-while True:
-    with app:
+with app:
+    while True:
         choice = input(Fore.CYAN + "[1] => chats lookup\n[2] => users lookup\n" + 
-                                   "[3] => search user in groups\n[<] " + Style.RESET_ALL)
+                                   "[3] => search user in groups\n" +
+                                   "[anything else] => exit\n" +
+                                   "[<] " + Style.RESET_ALL)
         if choice == "1":
             dialogs = app.get_dialogs()
             i = 0
